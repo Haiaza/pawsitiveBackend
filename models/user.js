@@ -15,13 +15,13 @@ const userSchema = new mongoose.Schema({
         required:   true
     },
     adoptedPets:    [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Pet'
+        type:       mongoose.Schema.Types.ObjectId,
+        ref:        'Pet'
     }],
     role: {
-        type: String,
-        enum: ['Admin','User'],
-        default: 'User'
+        type:       String,
+        enum:       ['Admin','User'],
+        default:    'User'
     }
 })
 
