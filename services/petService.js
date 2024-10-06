@@ -22,7 +22,7 @@ const assignPetPic= async (pet)  =>   {
 
 
             //*Assuming the API chose a pic the breed has already used , try again
-            const preExistingPic = Pet.findOne({ pic: newPicURL }) 
+            const preExistingPic = await Pet.findOne({ pic: newPicURL }) 
             if (preExistingPic) {
                 console.log('Already taken')
                 return assignPetPic(pet)
@@ -42,7 +42,7 @@ const assignPetPic= async (pet)  =>   {
 const createPet = async (formData) => {
     try {
         
-        const newPet =  await new Pet(formData)
+        let newPet =  await new Pet(formData)
         newPet =  assignPetPic(newPet)
 
     } catch (error) {
