@@ -7,7 +7,12 @@ const petSchema = new mongoose.Schema({
     isAdopted: {
         type:       Boolean,
         default:    false
+    },
+    pic: {
+        type:       String,
+        unique:     true
     }
 })
 
 const Pet = mongoose.model('Pet', petSchema)
+module.exports = Pet
