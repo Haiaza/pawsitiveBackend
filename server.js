@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 //routers
 const usersRouter = require('./controllers/users')
 const profilesRouter = require('./controllers/profiles')
+const petsRouter = require('./controllers/pets')
 
 mongoose.connect(process.env.MONGODB_URI);
 
@@ -18,6 +19,7 @@ app.use(express.json());
 // Routes go here
 app.use('/users', usersRouter)
 app.use('/profiles', profilesRouter);
+app.use('/pets', petsRouter)
 
 app.listen(3000, () => {
   console.log('The express app is ready!');
