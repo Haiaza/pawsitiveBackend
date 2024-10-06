@@ -3,7 +3,6 @@ const Pet = require('../models/pet')
 
 
 const assignPetPic= async (pet)  =>   {
-    console.log(pet)
     const breedName = pet.breed.toLowerCase().replace(' ',"-")
     const apiURL = `https://dog.ceo/api/breed/${breedName}/images/random/`
 
@@ -24,7 +23,7 @@ const assignPetPic= async (pet)  =>   {
             //*Assuming the API chose a pic the breed has already used , try again
             const preExistingPic = await Pet.findOne({ pic: newPicURL }) 
             if (preExistingPic) {
-                console.log('Already taken')
+                console.log('Pic Already taken')
                 return assignPetPic(pet)
             }
             //* The picture can now be applied now that we know its unique
@@ -42,8 +41,12 @@ const assignPetPic= async (pet)  =>   {
 const createPet = async (formData) => {
     try {
         
-        let newPet =  await new Pet(formData)
-        newPet =  assignPetPic(newPet)
+        let newPet =   new Pet(formData)
+        newPet =  await assignPetPic(newPet)
+
+        const savedPet = await newPet.save();
+        console.log('Pet saved successfully:', savedPet);
+        return savedPet;
 
     } catch (error) {
         console.error('Error creating pet:', error)
