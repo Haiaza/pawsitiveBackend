@@ -27,7 +27,7 @@ router.get('/', async (req, res) => {
 
 
 //* show
-router.get('/pets/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
     try {
         const petInDatabase = await Pet.findById(req.params.id)
         if (!petInDatabase) {
