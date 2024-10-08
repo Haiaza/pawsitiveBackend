@@ -3,6 +3,7 @@ const router = express.Router();
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const User = require('../models/user')
+const verifyToken = require('../middleware/verify-token')
 
 const SALT_LENGTH = 12
 //Landing page Btn - Sign up Page - Sign in Page
@@ -59,6 +60,29 @@ router.post('/signin', async (req, res) => {
     }
 });
 
+
+router.put('/:userId/pets', verifyToken, async (req, res) => {
+    try {
+        const pet = req.body
+        console.log(req.body)
+        //the specific pet were adopting
+        const user = await User.findById(req.params.userId)
+        
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        // adding the pet to your array
+        user.adoptedPets.push(pet)
+        
+        //save the pet
+        await user.save()
+
+        res.json({ adoptedPets: user.adoptedPets })
+
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+    })
 
 
 module.exports = router;
