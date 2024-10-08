@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken')
 const Pet = require('../models/pet')
+const User = require('../models/user')
 const { assignPetPic, createPet } = require('../services/petService')
 
 //* create
@@ -39,5 +40,13 @@ router.get('/:id', async (req, res) => {
     }
 })
 
+router.put('/:userId', async (req, res) => {
+    try {
+        const userPets = await User.findById(req.params.userId).populate(adoptedPets)
+        console.log({userPets})
+    } catch (error) {
+        res.status(500).json({error: error.message})
+    }
+})
 
 module.exports = router;

@@ -5,6 +5,8 @@ const bcrypt = require('bcryptjs')
 const User = require('../models/user')
 
 const SALT_LENGTH = 12
+//Landing page Btn - Sign up Page - Sign in Page
+
 
 router.post('/signup', async (req, res) => {
     try {

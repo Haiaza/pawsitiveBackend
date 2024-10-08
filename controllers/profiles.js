@@ -5,7 +5,7 @@ const verifyToken = require('../middleware/verify-token')
 
 router.get('/:userId', verifyToken, async (req, res) => {
     try {
-        const user = await User.findById(req.params.userId);
+        const user = await User.findById(req.params.userId).populate('adoptedPets');
         if (!user) {
             res.status(404);
             throw new Error('Profile not found.');
@@ -19,5 +19,7 @@ router.get('/:userId', verifyToken, async (req, res) => {
         }
     }
 });
+
+
 
 module.exports = router;
