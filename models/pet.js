@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const { v4: uuidv4 } = require('uuid')
 
 const petSchema = new mongoose.Schema({
     name:           String,
@@ -11,6 +12,12 @@ const petSchema = new mongoose.Schema({
     pic: {
         type:       String,
         unique:     true
+    },
+    id: {
+        type: String,
+        default: uuidv4,
+        unique: true,
+        required: true
     }
 })
 

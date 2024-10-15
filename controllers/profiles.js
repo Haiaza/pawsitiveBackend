@@ -5,7 +5,8 @@ const verifyToken = require('../middleware/verify-token')
 
 router.get('/:userId', verifyToken, async (req, res) => {
     try {
-        const user = await User.findById(req.params.userId).populate('adoptedPets');
+        const user = await User.findById(req.params.userId)
+        user.populate('adoptedPets');
         if (!user) {
             res.status(404);
             throw new Error('Profile not found.');

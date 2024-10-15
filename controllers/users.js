@@ -3,8 +3,8 @@ const router = express.Router();
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const User = require('../models/user')
+const Pet = require('../models/pet')
 const verifyToken = require('../middleware/verify-token')
-
 const SALT_LENGTH = 12
 //Landing page Btn - Sign up Page - Sign in Page
 
@@ -63,21 +63,40 @@ router.post('/signin', async (req, res) => {
 
 router.put('/:userId/pets', verifyToken, async (req, res) => {
     try {
-        const pet = req.body
-        console.log(req.body)
+        const { petId } = req.body
         //the specific pet were adopting
         const user = await User.findById(req.params.userId)
+        const pet = await Pet.find({ id: petId })
         
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
+
+        if (pet.isAdopted) {
+            return res.status(400).json({ message: 'This pet is already adopted' });
+        }
+
+        if (user.adoptedPets.includes(pet.id)) {
+            return res.status(400).json({ message: 'Pet already adopted by this user' })
+        }
+        console.log(pet)
         // adding the pet to your array
         user.adoptedPets.push(pet)
-        
+        user.adoptedPets = true
+
         //save the pet
         await user.save()
+        await Promise.all([user.save(), pet.save()]);
 
-        res.json({ adoptedPets: user.adoptedPets })
+        res.json({ 
+            message: 'Pet adopted successfully', 
+            adoptedPets: user.adoptedPets,
+            newPet: {
+                id: pet.id,
+                name: pet.name,
+                breed: pet.breed
+            }
+        })
 
     } catch (error) {
         return res.status(500).json({ error: error.message });
