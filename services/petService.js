@@ -3,7 +3,7 @@ const Pet = require('../models/pet')
 
 
 const assignPetPic= async (pet)  =>   {
-    const breedName = pet.breed.toLowerCase().replace(' ',"-")
+    const breedName = pet.breed.toLowerCase().split(' ').reverse().join('/')
     const apiURL = `https://dog.ceo/api/breed/${breedName}/images/random/`
 
     try {
