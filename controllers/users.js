@@ -63,31 +63,38 @@ router.post('/signin', async (req, res) => {
 
 router.put('/:userId/pets', verifyToken, async (req, res) => {
     try {
-        const { petId } = req.body
-        //the specific pet were adopting
-        const user = await User.findById(req.params.userId)
-        const pet = await Pet.find({ id: petId })
-        
+        const { petId } = req.body;
+
+        // Find the user by ID
+        const user = await User.findById(req.params.userId);
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
+        // Find the specific pet
+        const pet = await Pet.findById(petId);
+        if (!pet) {
+            return res.status(404).json({ message: 'Pet not found' });
+        }
+
+        // Check if the pet is already adopted
         if (pet.isAdopted) {
             return res.status(400).json({ message: 'This pet is already adopted' });
         }
 
+        // Check if the user has already adopted this pet
         if (user.adoptedPets.includes(pet.id)) {
-            return res.status(400).json({ message: 'Pet already adopted by this user' })
+            return res.status(400).json({ message: 'Pet already adopted by this user' });
         }
-        console.log(pet)
-        // adding the pet to your array
-        user.adoptedPets.push(pet)
-        user.adoptedPets = true
 
-        //save the pet
-        await user.save()
+        // Add the pet to the user's adopted pets array
+        user.adoptedPets.push(pet.id);
+        pet.isAdopted = true;  // Mark the pet as adopted
+
+        // Save both user and pet changes
         await Promise.all([user.save(), pet.save()]);
 
+        // Respond with success and the new pet data
         res.json({ 
             message: 'Pet adopted successfully', 
             adoptedPets: user.adoptedPets,
@@ -96,12 +103,26 @@ router.put('/:userId/pets', verifyToken, async (req, res) => {
                 name: pet.name,
                 breed: pet.breed
             }
-        })
+        });
 
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
-    })
+});
+
+
+//* show
+router.get('/:userId/pets', async (req, res) => {
+    try {
+        const petInDatabase = await User.findById(req.params.id)
+        if (!petInDatabase) {
+            return res.status(404).json({ error: 'User not found' })
+        }
+        res.json(petInDatabase)
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+})
 
 
 module.exports = router;
