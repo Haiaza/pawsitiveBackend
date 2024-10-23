@@ -4,6 +4,7 @@ const express = require('express');
 const cors = require('cors')
 const app = express();
 const mongoose = require('mongoose');
+// const verifyToken = require('./middleware/verify-token')
 //routers
 const usersRouter = require('./controllers/users')
 const profilesRouter = require('./controllers/profiles')
@@ -17,6 +18,7 @@ mongoose.connection.on('connected', () => {
 
 app.use(cors())
 app.use(express.json());
+// app.use(verifyToken) // tweak when im ready to auth the app.
 
 // Routes go here
 app.use('/users', usersRouter)
