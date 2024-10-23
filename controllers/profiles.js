@@ -8,7 +8,7 @@ router.get('/:userId', verifyToken, async (req, res) => {
     try {
         const user = await User.findById(req.params.userId).populate('adoptedPets')
 
-        console.log(`This is what is included inside of the user : ${user}`)
+        
         if (!user) {
             res.status(404);
             throw new Error('Profile not found.');

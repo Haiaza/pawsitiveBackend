@@ -9,7 +9,7 @@ const assignPetPic= async (pet)  =>   {
     try {
         const response = await axios.get(apiURL)
         if (response.data.status === 'success'){
-            console.log(response.data)
+            
             //* Attempt to generate a pet picture with breed 
             const baseURL = response.data.message.split('/').slice(0, -1).join('/')
             //* "https://images.dog.ceo/breeds/germanshepherd"
@@ -23,7 +23,7 @@ const assignPetPic= async (pet)  =>   {
             //*Assuming the API chose a pic the breed has already used , try again
             const preExistingPic = await Pet.findOne({ pic: newPicURL }) 
             if (preExistingPic) {
-                console.log('Pic Already taken')
+                
                 return assignPetPic(pet)
             }
             //* The picture can now be applied now that we know its unique
@@ -45,7 +45,7 @@ const createPet = async (formData) => {
         newPet =  await assignPetPic(newPet)
 
         const savedPet = await newPet.save();
-        console.log('Pet saved successfully:', savedPet);
+        
         return savedPet;
 
     } catch (error) {
