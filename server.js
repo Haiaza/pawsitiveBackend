@@ -25,7 +25,7 @@ app.use('/users', usersRouter)
 app.use('/profiles', profilesRouter);
 app.use('/pets', petsRouter)
 
-app.use(cors({ origin: 'http://localhost:5173' }))
+app.use(cors({ origin: 'https://pawsitive-match.netlify.app/' }))
 
 app.listen(3000, () => {
   console.log('The express app is ready!');
